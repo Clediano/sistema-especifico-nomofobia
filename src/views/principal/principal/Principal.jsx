@@ -3,10 +3,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, IconButton, Dialog, DialogTitle, Button, DialogContent, DialogActions, Radio, Grid, FormControlLabel, Paper, FormLabel } from '@material-ui/core';
 import { ExitToApp } from '@material-ui/icons';
 import autoBind from 'react-autobind';
-import { RESPOSTAS_SMARTPHONE } from './constantes/respostas';
-import { RESPOSTAS_INTERNET } from './constantes/respostas';
-import { RESPOSTAS_FACEBOOK } from './constantes/respostas';
-import { RESPOSTAS_WHATSAPP } from './constantes/respostas';
+import { RESPOSTAS_SMARTPHONE } from '../constantes/respostas';
+import { RESPOSTAS_INTERNET } from '../constantes/respostas';
+import { RESPOSTAS_FACEBOOK } from '../constantes/respostas';
+import { RESPOSTAS_WHATSAPP } from '../constantes/respostas';
 
 const styles = theme => ({
     root: {
@@ -40,7 +40,7 @@ const styles = theme => ({
     buttons: {
         display: 'flex',
         justifyContent: 'flex-end',
-      },
+    },
     button: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: theme.spacing.unit,
@@ -185,10 +185,6 @@ class Principal extends Component {
                                         value={RESPOSTAS_SMARTPHONE.SEMPRE}
                                     />
                                 </Grid>
-                            </Grid>
-                        </React.Fragment>
-                        <React.Fragment>
-                            <Grid container spacing={24}>
                                 <Grid item xs={12} sm={12} >
                                     <FormLabel component="legend">2 - Está ligado a internet mais tempo do que pretendia?</FormLabel>
                                     <FormControlLabel
@@ -234,10 +230,6 @@ class Principal extends Component {
                                         value={RESPOSTAS_INTERNET.SEMPRE}
                                     />
                                 </Grid>
-                            </Grid>
-                        </React.Fragment>
-                        <React.Fragment>
-                            <Grid container spacing={24}>
                                 <Grid item xs={12} sm={12}>
                                     <FormLabel component="legend">3 - Com que frequência você usa o Facebook ao longo do seu dia?</FormLabel>
                                     <FormControlLabel
@@ -283,10 +275,6 @@ class Principal extends Component {
                                         value={RESPOSTAS_FACEBOOK.SEMPRE}
                                     />
                                 </Grid>
-                            </Grid>
-                        </React.Fragment>
-                        <React.Fragment>
-                            <Grid container spacing={24}>
                                 <Grid item xs={12} sm={12}>
                                     <FormLabel component="legend">4 - Com que frência você usa o Watsapp ao longo do seu dia?</FormLabel>
                                     <FormControlLabel
@@ -334,18 +322,16 @@ class Principal extends Component {
                                 </Grid>
                             </Grid>
                         </React.Fragment>
-                        <React.Fragment>
-                            <div className={classes.buttons}>                            
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={this.handleNext}
-                                    className={classes.button}
-                                >
-                                    Next
-                                </Button>
-                            </div>
-                        </React.Fragment>
+                        <div className={classes.buttons}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={this.handleNext}
+                                className={classes.button}
+                            >
+                            Next
+                            </Button>
+                        </div>
                     </Paper>
                 </main>
             </div>
