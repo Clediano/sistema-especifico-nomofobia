@@ -1,85 +1,31 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, IconButton, Dialog, DialogTitle, Button, DialogContent, DialogActions, Radio, Grid, FormControlLabel, Paper, FormLabel } from '@material-ui/core';
-import { ExitToApp } from '@material-ui/icons';
+import { Tooltip, Typography, Button, Radio, FormControlLabel, FormLabel } from '@material-ui/core';
 import autoBind from 'react-autobind';
 import { RESPOSTAS_SMARTPHONE } from '../constantes/respostas';
 import { RESPOSTAS_INTERNET } from '../constantes/respostas';
 import { RESPOSTAS_FACEBOOK } from '../constantes/respostas';
 import { RESPOSTAS_WHATSAPP } from '../constantes/respostas';
+import TopBar from '../../../components/TopBar';
+import Layout from '../../../components/Layout';
+import BottomBar from '../../../components/BottomBar';
+import Card from '../../../components/Card';
+import GridContainer from '../../../components/GridContainer';
+import PaperContainer from '../../../components/PaperContainer';
+import GridItem from '../../../components/GridItem';
+import { objectToArray, sortObjectArray, compareRespToTieBraker } from './functions';
 
-const styles = theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    toolbar: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 3,
-        padding: theme.spacing.unit * 2,
-        [theme.breakpoints.up(800 + theme.spacing.unit * 3 * 2)]: {
-            marginTop: theme.spacing.unit * 6,
-            marginBottom: theme.spacing.unit * 6,
-            padding: theme.spacing.unit * 3,
-        },
-    },
-    layout: {
-        width: 'auto',
-        marginLeft: theme.spacing.unit * 2,
-        marginRight: theme.spacing.unit * 2,
-        [theme.breakpoints.up(800 + theme.spacing.unit * 2 * 2)]: {
-            width: 800,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
-    },
-    buttons: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-    },
-    button: {
-        marginTop: theme.spacing.unit * 3,
-        marginLeft: theme.spacing.unit,
-    }
-});
-
-class Principal extends Component {
+export default class Principal extends Component {
     constructor(props) {
         super(props);
 
         autoBind(this);
 
         this.state = {
-            open: false,
-            userLogged: '',
             respSmartphone: null,
             respInternet: null,
-            respFacebook: null
+            respFacebook: null,
+            respWhatsApp: null
         }
-    }
-
-    componentDidMount() {
-        const userLogged = window.localStorage.getItem('userLogged');
-
-        if (userLogged) {
-            this.setState({ userLogged });
-        } else {
-            this.setState({ userLogged: 'ANONYMOUS' });
-        }
-    }
-
-    handleClose() {
-        this.setState({ open: !this.state.open });
-    }
-
-    handleConfirm() {
-        window.localStorage.removeItem('userLogged');
-
-        this.props.history.push('/');
     }
 
     handleChangeSmartphone(e) {
@@ -89,58 +35,34 @@ class Principal extends Component {
     handleChangeInternet(e) {
         this.setState({ respInternet: e.target.value })
     }
+
     handleChangeFacebook(e) {
         this.setState({ respFacebook: e.target.value })
     }
 
     handleChangeWhatsapp(e) {
-        this.setState({ respWhatsapp: e.target.value })
+        this.setState({ respWhatsApp: e.target.value })
+    }
+
+    handleProcessForm() {
+        const objectMaped = objectToArray(this.state);
+        const arrayOrdenado = sortObjectArray(objectMaped);
+        const respRepetidas = compareRespToTieBraker(arrayOrdenado);
     }
 
     render() {
 
-        const { classes } = this.props;
-
         return (
-            <div className={classes.root}>
-                <Dialog
-                    onClose={this.handleClose}
-                    aria-labelledby="customized-dialog-title"
-                    open={this.state.open}
-                >
-                    <DialogTitle>Confirmação</DialogTitle>
-                    <DialogContent>
-                        <Typography gutterBottom>
-                            Tem certeza que deseja sair do sistema? Você será redirecionado para a tela inicial.
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleConfirm} color="primary">Sim</Button>
-                        <Button onClick={this.handleClose} color="secondary">Não</Button>
-                    </DialogActions>
-                </Dialog>
-                <AppBar position="static" color="default">
-                    <Toolbar className={classes.toolbar}>
-                        <Typography variant="h5" color="textSecondary">Nomofobia</Typography>
-                        <Typography variant="h5" color="textSecondary">{this.state.userLogged}</Typography>
-                        <IconButton
-                            onClick={this.handleClose}
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="Menu"
-                        >
-                            <ExitToApp />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-                <main className={classes.layout}>
-                    <Paper className={classes.paper}>
+            <PaperContainer>
+                <TopBar />
+                <Layout>
+                    <Card>
                         <React.Fragment >
-                            <Typography variant="h5" style={{ marginBottom: '15px' }} >
+                            <Typography variant="h5" style={{ marginBottom: '15px' }}>
                                 Formulário Inicial
                             </Typography>
-                            <Grid container spacing={24}>
-                                <Grid item xs={12} sm={12} >
+                            <GridContainer>
+                                <GridItem>
                                     <FormLabel component="legend">1 - Com que frequência você usa o smartphone ao longo do seu dia?</FormLabel>
                                     <FormControlLabel
                                         label='Não se aplica'
@@ -184,8 +106,8 @@ class Principal extends Component {
                                         onChange={e => this.handleChangeSmartphone(e)}
                                         value={RESPOSTAS_SMARTPHONE.SEMPRE}
                                     />
-                                </Grid>
-                                <Grid item xs={12} sm={12} >
+                                </GridItem>
+                                <GridItem>
                                     <FormLabel component="legend">2 - Está ligado a internet mais tempo do que pretendia?</FormLabel>
                                     <FormControlLabel
                                         label='Não se aplica'
@@ -229,8 +151,8 @@ class Principal extends Component {
                                         onChange={e => this.handleChangeInternet(e)}
                                         value={RESPOSTAS_INTERNET.SEMPRE}
                                     />
-                                </Grid>
-                                <Grid item xs={12} sm={12}>
+                                </GridItem>
+                                <GridItem>
                                     <FormLabel component="legend">3 - Com que frequência você usa o Facebook ao longo do seu dia?</FormLabel>
                                     <FormControlLabel
                                         label='Não se aplica'
@@ -274,69 +196,69 @@ class Principal extends Component {
                                         onChange={e => this.handleChangeFacebook(e)}
                                         value={RESPOSTAS_FACEBOOK.SEMPRE}
                                     />
-                                </Grid>
-                                <Grid item xs={12} sm={12}>
+                                </GridItem>
+                                <GridItem>
                                     <FormLabel component="legend">4 - Com que frência você usa o Watsapp ao longo do seu dia?</FormLabel>
                                     <FormControlLabel
                                         label='Não se aplica'
                                         control={<Radio color="secondary" />}
-                                        checked={this.state.respWhatsapp === RESPOSTAS_WHATSAPP.NAO_SE_APLICA}
+                                        checked={this.state.respWhatsApp === RESPOSTAS_WHATSAPP.NAO_SE_APLICA}
                                         onChange={e => this.handleChangeWhatsapp(e)}
                                         value={RESPOSTAS_WHATSAPP.NAO_SE_APLICA}
                                     />
                                     <FormControlLabel
                                         label='Nunca'
                                         control={<Radio color="secondary" />}
-                                        checked={this.state.respWhatsapp === RESPOSTAS_WHATSAPP.NUNCA}
+                                        checked={this.state.respWhatsApp === RESPOSTAS_WHATSAPP.NUNCA}
                                         onChange={e => this.handleChangeWhatsapp(e)}
                                         value={RESPOSTAS_WHATSAPP.NUNCA}
                                     />
                                     <FormControlLabel
                                         label='Quase nunca'
                                         control={<Radio color="secondary" />}
-                                        checked={this.state.respWhatsapp === RESPOSTAS_WHATSAPP.QUASE_NUNCA}
+                                        checked={this.state.respWhatsApp === RESPOSTAS_WHATSAPP.QUASE_NUNCA}
                                         onChange={e => this.handleChangeWhatsapp(e)}
                                         value={RESPOSTAS_WHATSAPP.QUASE_NUNCA}
                                     />
                                     <FormControlLabel
                                         label='As vezes'
                                         control={<Radio color="secondary" />}
-                                        checked={this.state.respWhatsapp === RESPOSTAS_WHATSAPP.AS_VEZES}
+                                        checked={this.state.respWhatsApp === RESPOSTAS_WHATSAPP.AS_VEZES}
                                         onChange={e => this.handleChangeWhatsapp(e)}
                                         value={RESPOSTAS_WHATSAPP.AS_VEZES}
                                     />
                                     <FormControlLabel
                                         label='Quase sempre'
                                         control={<Radio color="secondary" />}
-                                        checked={this.state.respWhatsapp === RESPOSTAS_WHATSAPP.QUASE_SEMPRE}
+                                        checked={this.state.respWhatsApp === RESPOSTAS_WHATSAPP.QUASE_SEMPRE}
                                         onChange={e => this.handleChangeWhatsapp(e)}
                                         value={RESPOSTAS_WHATSAPP.QUASE_SEMPRE}
                                     />
                                     <FormControlLabel
                                         label='Sempre'
                                         control={<Radio color="secondary" />}
-                                        checked={this.state.respWhatsapp === RESPOSTAS_WHATSAPP.SEMPRE}
+                                        checked={this.state.respWhatsApp === RESPOSTAS_WHATSAPP.SEMPRE}
                                         onChange={e => this.handleChangeWhatsapp(e)}
                                         value={RESPOSTAS_WHATSAPP.SEMPRE}
                                     />
-                                </Grid>
-                            </Grid>
+                                </GridItem>
+                            </GridContainer>
                         </React.Fragment>
-                        <div className={classes.buttons}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleNext}
-                                className={classes.button}
-                            >
-                            Next
-                            </Button>
-                        </div>
-                    </Paper>
-                </main>
-            </div>
+                        <BottomBar>
+                            <Tooltip title="Clique para continuar o questionario">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={this.handleProcessForm}
+                                >
+                                    Próximo
+                                </Button>
+                            </Tooltip>
+                        </BottomBar>
+                    </Card>
+                </Layout>
+            </PaperContainer>
         );
     }
 }
 
-export default withStyles(styles)(Principal);
