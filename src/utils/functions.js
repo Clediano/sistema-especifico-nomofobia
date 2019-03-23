@@ -1,6 +1,6 @@
 export function objectToArray(form) {
 
-    let arrayOrdened = new Array();
+    let arrayOrdened = [];
 
     Object.getOwnPropertyNames(form).map(el => {
         const name = el;
@@ -28,7 +28,7 @@ function compare(a, b) {
 export function compareRespToTieBraker(array) {
     let utimoElemento = array[array.length - 1];
 
-    let arrayIguais = new Array();
+    let arrayIguais = [];
         arrayIguais.push(utimoElemento);
 
     for (let i = (array.length - 2); i > -1; i--) {
