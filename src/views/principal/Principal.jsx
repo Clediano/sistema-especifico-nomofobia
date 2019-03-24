@@ -18,10 +18,10 @@ export default class Principal extends Component {
         autoBind(this);
 
         this.state = {
-            smartphone: RESPOSTAS.NAO_SE_APLICA,
-            internet: RESPOSTAS.NAO_SE_APLICA,
-            facebook: RESPOSTAS.NAO_SE_APLICA,
-            whatsapp: RESPOSTAS.NAO_SE_APLICA,
+            smartphone: null,
+            internet: null,
+            facebook: null,
+            whatsapp: null,
         }
     }
 

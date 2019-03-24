@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core';
-import {Paper} from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 
 const styles = theme => ({
     paper: {
@@ -13,19 +13,25 @@ const styles = theme => ({
             padding: theme.spacing.unit * 3,
         },
     },
+    typograthy: {
+        marginBottom: '55px'
+    }
 });
 
 class Card extends Component {
-  render() {
-    
-    const { classes } = this.props;
+    render() {
 
-    return(
-        <Paper className={classes.paper}>
-            {this.props.children}
-        </Paper>
-    )
-  }
+        const { classes } = this.props;
+
+        return (
+            <Paper className={classes.paper}>
+                <Typography variant="h5" className={classes.typograthy}>
+                    {this.props.cardTitle}
+                </Typography>
+                {this.props.children}
+            </Paper>
+        )
+    }
 }
 
 export default withStyles(styles)(Card);

@@ -3,7 +3,7 @@ import { Grid, withStyles } from '@material-ui/core';
 
 const styles = () => ({
   marginBlock: {
-    marginBottom: '25px'
+    marginBottom: '15px'
   }
 });
 

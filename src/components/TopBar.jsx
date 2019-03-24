@@ -70,7 +70,14 @@ class TopBar extends Component {
                     </DialogActions>
                 </Dialog>
                 <Toolbar className={classes.toolbar}>
-                    <Typography variant="h5" color="textSecondary">Nomofobia</Typography>
+                    <Typography
+                        variant="h5"
+                        onClick={() => this.props.history.push('/principal')}
+                        color="textSecondary"
+                        style={{ cursor: 'pointer' }}
+                    >
+                        Nomofobia
+                    </Typography>
                     <Typography variant="h5" color="textSecondary">{this.state.userLogged}</Typography>
                     <Tooltip title="Clique para sair do sistema">
                         <IconButton
