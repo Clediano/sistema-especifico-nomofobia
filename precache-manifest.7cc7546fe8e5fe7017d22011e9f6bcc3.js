@@ -1,7 +1,7 @@
 self.__precacheManifest = [
   {
-    "revision": "d302a91d1185c3cf016a",
-    "url": "/sistema-especifico-nomofobia/static/js/main.4a617d4a.chunk.js"
+    "revision": "7609308102286d14ed65",
+    "url": "/sistema-especifico-nomofobia/static/js/main.cfd0c3b6.chunk.js"
   },
   {
     "revision": "8c041fbb871420e3e19e",
@@ -12,7 +12,7 @@ self.__precacheManifest = [
     "url": "/sistema-especifico-nomofobia/static/js/2.4902fbb5.chunk.js"
   },
   {
-    "revision": "8fc431e8a094fdaf06d4ed54f18a0929",
+    "revision": "f251b11e1af2bd84eefa79d341ccf789",
     "url": "/sistema-especifico-nomofobia/index.html"
   }
 ];

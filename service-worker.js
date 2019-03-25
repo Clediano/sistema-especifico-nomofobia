@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/sistema-especifico-nomofobia/precache-manifest.fefeeae8cca7bc87305f3269766a05f7.js"
+  "/sistema-especifico-nomofobia/precache-manifest.7cc7546fe8e5fe7017d22011e9f6bcc3.js"
 );
 
 workbox.clientsClaim();
