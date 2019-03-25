@@ -1,4 +1,7 @@
+import React from 'react'
 import { firebaseDatabase } from "../database";
+import GridItem from "../components/GridItem";
+import FormOptions from "../components/FormOptions";
 
 export function objectToArray(form) {
 
@@ -31,12 +34,12 @@ export function compareRespToTieBraker(array) {
     let utimoElemento = array[array.length - 1];
 
     let arrayIguais = [];
-        arrayIguais.push(utimoElemento);
+    arrayIguais.push(utimoElemento);
 
     for (let i = (array.length - 2); i > -1; i--) {
         const element = array[i];
 
-        if(element.value === utimoElemento.value){
+        if (element.value === utimoElemento.value) {
             arrayIguais.push(element);
         }
     }
@@ -45,10 +48,63 @@ export function compareRespToTieBraker(array) {
 }
 
 
-export function criar(array, children){
+export function criar(array, children) {
     let ref = firebaseDatabase.ref(`${children}`);
 
     array.forEach(el => {
-        ref.push({descricao: el});
+        ref.push({ descricao: el });
     })
+}
+
+export async function carregarQuestoesFormulario(formularioNome) {
+    let ref = firebaseDatabase.ref(`${formularioNome}`);
+
+    const questionario = await ref.once('value').then(async snapshot => {
+        return snapshot.val();
+    });
+
+    var result = Object.entries(questionario).map(element => {
+        const name = element[0];
+        const value = element[1].descricao;
+
+        return { name, value };
+    });
+    return result;
+}
+
+export function calcularPontuacaoFormulario(respostas) {
+    let pontuacaoTotal = 0;
+
+    Object.keys(respostas).map(element => {
+        pontuacaoTotal += Number(respostas[element])
+    });
+
+    return pontuacaoTotal;
+}
+
+export function camposObrigatoriosPreenchidos(perguntas, respostas){
+    if (perguntas.length === Object.keys(respostas).length) {
+        return true;
+    }
+    return false;
+}
+
+export function montarQuestionario(state, handleChange) {
+    const { perguntas, respostas } = state;
+
+    const result = perguntas && perguntas.map(element => {
+        return (
+            <GridItem key={element.name}>
+                <FormOptions
+                    error={!respostas[element.name]}
+                    errorMessage="Campo obrigatório *"
+                    question={element.value}
+                    name={element.name}
+                    value={respostas[element.name]}
+                    handleChange={handleChange}
+                />
+            </GridItem>
+        );
+    });
+    return result;
 }

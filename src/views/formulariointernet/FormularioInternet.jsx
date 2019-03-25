@@ -7,18 +7,10 @@ import BottomBar from '../../components/BottomBar';
 import Card from '../../components/Card';
 import GridContainer from '../../components/GridContainer';
 import PaperContainer from '../../components/PaperContainer';
-import GridItem from '../../components/GridItem';
-import FormOptions from '../../components/FormOptions';
 import ConfirmDialog from '../../components/ConfirmDialog';
+import { carregarQuestoesFormulario, montarQuestionario, calcularPontuacaoFormulario, camposObrigatoriosPreenchidos } from '../../utils/functions';
 
-import {
-    carregarQuestoesFormulario,
-    calcularPontuacaoFormulario,
-    camposObrigatoriosPreenchidos,
-    montarQuestionario
-} from '../../utils/functions';
-
-export default class FormularioFacebook extends Component {
+export default class FormularioInternet extends Component {
 
     constructor(props) {
         super(props);
@@ -26,6 +18,7 @@ export default class FormularioFacebook extends Component {
         autoBind(this);
 
         this.state = {
+            pontuacaoTotal: 0,
             respostas: {},
             perguntas: null,
             error: false
@@ -33,29 +26,9 @@ export default class FormularioFacebook extends Component {
     }
 
     async componentDidMount() {
-        const perguntas = await carregarQuestoesFormulario('formulario_facebook');
+        const perguntas = await carregarQuestoesFormulario('formulario_internet');
 
         this.setState({ perguntas });
-    }
-
-    montarQuestionario() {
-        const { perguntas } = this.state;
-
-        const result = perguntas && perguntas.map(element => {
-            return (
-                <GridItem key={element.name}>
-                    <FormOptions
-                        error={!this.state.respostas[element.name]}
-                        errorMessage="Campo obrigatório *"
-                        question={element.value}
-                        name={element.name}
-                        value={this.state.respostas[element.name]}
-                        handleChange={this.handleChange}
-                    />
-                </GridItem>
-            );
-        });
-        return result;
     }
 
     handleChange(e, name) {
@@ -69,14 +42,14 @@ export default class FormularioFacebook extends Component {
     }
 
     calcularPontuacao() {
-
         const { respostas, perguntas } = this.state;
 
         let pontuacaoTotal = calcularPontuacaoFormulario(respostas);
 
         if (camposObrigatoriosPreenchidos(perguntas, respostas)) {
+
             this.props.history.push('/resultado', {
-                categoria: 'facebook',
+                categoria: 'internet',
                 pontuacao: pontuacaoTotal
             });
         } else {
@@ -96,7 +69,7 @@ export default class FormularioFacebook extends Component {
 
                 <Layout>
 
-                    <Card cardTitle="Formulário Facebook">
+                    <Card cardTitle="Navegação na internet">
 
                         <GridContainer>
                             {montarQuestionario(this.state, this.handleChange)}

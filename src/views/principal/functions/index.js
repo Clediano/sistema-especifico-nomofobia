@@ -1,4 +1,7 @@
+import React from 'react';
 import { firebaseDatabase } from '../../../database/index';
+import GridItem from '../../../components/GridItem';
+import FormOptions from '../../../components/FormOptions';
 
 export async function buscarPerguntas() {
 
@@ -16,4 +19,25 @@ export async function buscarPerguntas() {
         perguntas.push({ id, value, categoria });
     });
     return perguntas;
+}
+
+export function montarQuestionarioPrincipal(state, handleChange) {
+    
+    const { perguntas, respostas } = state;
+
+    const result = perguntas && perguntas.map(element => {
+        return (
+            <GridItem key={element.id}>
+                <FormOptions
+                    error={!respostas[element.categoria]}
+                    errorMessage="Campo obrigatório *"
+                    question={element.value}
+                    name={element.categoria}
+                    value={respostas[element.categoria]}
+                    handleChange={handleChange}
+                />
+            </GridItem>
+        );
+    });
+    return result;
 }
