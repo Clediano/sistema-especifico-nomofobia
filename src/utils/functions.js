@@ -1,10 +1,12 @@
+import { firebaseDatabase } from "../database";
+
 export function objectToArray(form) {
 
     let arrayOrdened = [];
 
-    Object.getOwnPropertyNames(form).map(el => {
-        const name = el;
-        const value = form[name];
+    Object.entries(form).map(el => {
+        const name = el[0];
+        const value = Number(el[1]);
         arrayOrdened.push({ name, value });
     });
 
@@ -40,4 +42,13 @@ export function compareRespToTieBraker(array) {
     }
 
     return arrayIguais;
+}
+
+
+export function criar(array, children){
+    let ref = firebaseDatabase.ref(`${children}`);
+
+    array.forEach(el => {
+        ref.push({descricao: el});
+    })
 }

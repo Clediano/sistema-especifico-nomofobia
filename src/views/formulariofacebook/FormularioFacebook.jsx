@@ -83,6 +83,10 @@ export default class FormularioFacebook extends Component {
                 pontuacaoTotal += Number(respostas[element])
             });
             this.setState({ pontuacaoTotal });
+            this.props.history.push('/resultado', {
+                categoria: 'facebook',
+                pontuacao: pontuacaoTotal
+            });
         } else {
             this.setState({ error: !this.state.error })
         }
@@ -95,10 +99,13 @@ export default class FormularioFacebook extends Component {
     render() {
         return (
             <PaperContainer>
+
                 <TopBar />
+
                 <Layout>
+
                     <Card cardTitle="Formulário Facebook">
-                    
+
                         <GridContainer>
                             {this.montarQuestionario()}
                         </GridContainer>
@@ -114,8 +121,11 @@ export default class FormularioFacebook extends Component {
                                 </Button>
                             </Tooltip>
                         </BottomBar>
+
                     </Card>
+
                 </Layout>
+
                 <ConfirmDialog
                     dialogTitle="Atenção"
                     onClose={this.handleClose}
@@ -126,6 +136,7 @@ export default class FormularioFacebook extends Component {
                 >
                     <Button onClick={this.handleClose} color="primary">Ok</Button>
                 </ConfirmDialog>
+
             </PaperContainer>
         );
     }

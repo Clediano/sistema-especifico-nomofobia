@@ -5,6 +5,7 @@ import Main from './views/Main';
 import Principal from './views/principal/Principal';
 import Desempate from './views/desempate/Desempate';
 import FormularioFacebook from './views/formulariofacebook/FormularioFacebook';
+import Resultado from './views/resultado/Resultado';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -15,7 +16,7 @@ ReactDOM.render(
             <Route exact path="/whatsapp" component={Desempate} />
             <Route exact path="/facebook" component={FormularioFacebook} />
             <Route exact path="/internet" component={Desempate} />
-            <Route exact path="/resultado" component={Desempate} />
+            <Route exact path="/resultado" component={Resultado} />
             <Route path="/" component={Main} />
         </Switch>
     </BrowserRouter>, document.getElementById('root'));

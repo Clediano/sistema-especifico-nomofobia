@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tooltip, Typography, Button, Radio, FormControlLabel, FormLabel } from '@material-ui/core';
+import { Tooltip, Button, Radio, FormControlLabel, FormLabel } from '@material-ui/core';
 import autoBind from 'react-autobind';
 import { RESPOSTAS } from '../../utils/respostas';
 import TopBar from '../../components/TopBar';
@@ -10,6 +10,10 @@ import GridContainer from '../../components/GridContainer';
 import PaperContainer from '../../components/PaperContainer';
 import GridItem from '../../components/GridItem';
 import { objectToArray, sortObjectArray, compareRespToTieBraker } from '../../utils/functions';
+import { buscarPerguntas } from './functions';
+import { criar } from '../../utils/functions';
+import FormOptions from '../../components/FormOptions';
+import ConfirmDialog from '../../components/ConfirmDialog';
 
 export default class Principal extends Component {
     constructor(props) {
@@ -18,31 +22,76 @@ export default class Principal extends Component {
         autoBind(this);
 
         this.state = {
-            smartphone: null,
-            internet: null,
-            facebook: null,
-            whatsapp: null,
+            respostas: {},
+            perguntas: null,
+            error: false
         }
+    }
+
+    async componentDidMount() {
+        const perguntas = await buscarPerguntas();
+
+        await this.setState({ perguntas });
     }
 
     handleProcessForm() {
-        const objectMaped = objectToArray(this.state);
-        const arrayOrdenado = sortObjectArray(objectMaped);
-        const respostas = compareRespToTieBraker(arrayOrdenado);
+        const { respostas, perguntas } = this.state;
 
-        if (respostas.length === 1) {
-            this.renderizarFormulario(respostas)
+        if (Object.values(respostas).length === perguntas.length) {
+            const objectMaped = objectToArray(respostas);
+            const arrayOrdenado = sortObjectArray(objectMaped);
+            const resp = compareRespToTieBraker(arrayOrdenado);
+
+            if (resp.length === 1) {
+                this.renderizarFormulario(resp);
+            } else {
+                this.renderizarDesempate(resp);
+            }
         } else {
-            this.renderizarDesempate(respostas);
+            this.setState({ error: !this.state.error })
         }
+
+    }
+
+    montarQuestionario() {
+        const { perguntas } = this.state;
+
+        const result = perguntas && perguntas.map(element => {
+            return (
+                <GridItem key={element.id}>
+                    <FormOptions
+                        error={!this.state.respostas[element.categoria]}
+                        errorMessage="Campo obrigatório *"
+                        question={element.value}
+                        name={element.categoria}
+                        value={this.state.respostas[element.categoria]}
+                        handleChange={this.handleChange}
+                    />
+                </GridItem>
+            );
+        });
+        return result;
     }
 
     renderizarFormulario(respostas) {
-        this.props.history.push(`/${respostas.name}`, { respostas });
+        this.props.history.push(`/${respostas[0].name}`, { respostas });
     }
 
     renderizarDesempate(respostas) {
         this.props.history.push('/desempate', { respostas });
+    }
+
+    handleClose(){
+        this.setState({ error: !this.state.error })
+    }
+
+    handleChange(e, name) {
+        this.setState({
+            respostas: {
+                ...this.state.respostas,
+                [name]: e.target.value
+            }
+        })
     }
 
     render() {
@@ -50,194 +99,10 @@ export default class Principal extends Component {
             <PaperContainer>
                 <TopBar />
                 <Layout>
-                    <Card>
-                        <React.Fragment >
-                            <Typography variant="h5" style={{ marginBottom: '15px' }}>
-                                Formulário Inicial
-                            </Typography>
-                            <GridContainer>
-                                <GridItem>
-                                    <FormLabel component="legend">1 - Com que frequência você usa o smartphone ao longo do seu dia?</FormLabel>
-                                    <FormControlLabel
-                                        label='Não se aplica'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.smartphone === RESPOSTAS.NAO_SE_APLICA}
-                                        onChange={e => this.setState({ smartphone: e.target.value })}
-                                        value={RESPOSTAS.NAO_SE_APLICA}
-                                    />
-                                    <FormControlLabel
-                                        label='Nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.smartphone === RESPOSTAS.NUNCA}
-                                        onChange={e => this.setState({ smartphone: e.target.value })}
-                                        value={RESPOSTAS.NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.smartphone === RESPOSTAS.QUASE_NUNCA}
-                                        onChange={e => this.setState({ smartphone: e.target.value })}
-                                        value={RESPOSTAS.QUASE_NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='As vezes'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.smartphone === RESPOSTAS.AS_VEZES}
-                                        onChange={e => this.setState({ smartphone: e.target.value })}
-                                        value={RESPOSTAS.AS_VEZES}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.smartphone === RESPOSTAS.QUASE_SEMPRE}
-                                        onChange={e => this.setState({ smartphone: e.target.value })}
-                                        value={RESPOSTAS.QUASE_SEMPRE}
-                                    />
-                                    <FormControlLabel
-                                        label='Sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.smartphone === RESPOSTAS.SEMPRE}
-                                        onChange={e => this.setState({ smartphone: e.target.value })}
-                                        value={RESPOSTAS.SEMPRE}
-                                    />
-                                </GridItem>
-                                <GridItem>
-                                    <FormLabel component="legend">2 - Está ligado a internet mais tempo do que pretendia?</FormLabel>
-                                    <FormControlLabel
-                                        label='Não se aplica'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.internet === RESPOSTAS.NAO_SE_APLICA}
-                                        onChange={e => this.setState({ internet: e.target.value })}
-                                        value={RESPOSTAS.NAO_SE_APLICA}
-                                    />
-                                    <FormControlLabel
-                                        label='Nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.internet === RESPOSTAS.NUNCA}
-                                        onChange={e => this.setState({ internet: e.target.value })}
-                                        value={RESPOSTAS.NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.internet === RESPOSTAS.QUASE_NUNCA}
-                                        onChange={e => this.setState({ internet: e.target.value })}
-                                        value={RESPOSTAS.QUASE_NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='As vezes'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.internet === RESPOSTAS.AS_VEZES}
-                                        onChange={e => this.setState({ internet: e.target.value })}
-                                        value={RESPOSTAS.AS_VEZES}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.internet === RESPOSTAS.QUASE_SEMPRE}
-                                        onChange={e => this.setState({ internet: e.target.value })}
-                                        value={RESPOSTAS.QUASE_SEMPRE}
-                                    />
-                                    <FormControlLabel
-                                        label='Sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.internet === RESPOSTAS.SEMPRE}
-                                        onChange={e => this.setState({ internet: e.target.value })}
-                                        value={RESPOSTAS.SEMPRE}
-                                    />
-                                </GridItem>
-                                <GridItem>
-                                    <FormLabel component="legend">3 - Com que frequência você usa o Facebook ao longo do seu dia?</FormLabel>
-                                    <FormControlLabel
-                                        label='Não se aplica'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.facebook === RESPOSTAS.NAO_SE_APLICA}
-                                        onChange={e => this.setState({ facebook: e.target.value })}
-                                        value={RESPOSTAS.NAO_SE_APLICA}
-                                    />
-                                    <FormControlLabel
-                                        label='Nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.facebook === RESPOSTAS.NUNCA}
-                                        onChange={e => this.setState({ facebook: e.target.value })}
-                                        value={RESPOSTAS.NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.facebook === RESPOSTAS.QUASE_NUNCA}
-                                        onChange={e => this.setState({ facebook: e.target.value })}
-                                        value={RESPOSTAS.QUASE_NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='As vezes'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.facebook === RESPOSTAS.AS_VEZES}
-                                        onChange={e => this.setState({ facebook: e.target.value })}
-                                        value={RESPOSTAS.AS_VEZES}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.facebook === RESPOSTAS.QUASE_SEMPRE}
-                                        onChange={e => this.setState({ facebook: e.target.value })}
-                                        value={RESPOSTAS.QUASE_SEMPRE}
-                                    />
-                                    <FormControlLabel
-                                        label='Sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.facebook === RESPOSTAS.SEMPRE}
-                                        onChange={e => this.setState({ facebook: e.target.value })}
-                                        value={RESPOSTAS.SEMPRE}
-                                    />
-                                </GridItem>
-                                <GridItem>
-                                    <FormLabel component="legend">4 - Com que frência você usa o Watsapp ao longo do seu dia?</FormLabel>
-                                    <FormControlLabel
-                                        label='Não se aplica'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.whatsapp === RESPOSTAS.NAO_SE_APLICA}
-                                        onChange={e => this.setState({ whatsapp: e.target.value })}
-                                        value={RESPOSTAS.NAO_SE_APLICA}
-                                    />
-                                    <FormControlLabel
-                                        label='Nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.whatsapp === RESPOSTAS.NUNCA}
-                                        onChange={e => this.setState({ whatsapp: e.target.value })}
-                                        value={RESPOSTAS.NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase nunca'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.whatsapp === RESPOSTAS.QUASE_NUNCA}
-                                        onChange={e => this.setState({ whatsapp: e.target.value })}
-                                        value={RESPOSTAS.QUASE_NUNCA}
-                                    />
-                                    <FormControlLabel
-                                        label='As vezes'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.whatsapp === RESPOSTAS.AS_VEZES}
-                                        onChange={e => this.setState({ whatsapp: e.target.value })}
-                                        value={RESPOSTAS.AS_VEZES}
-                                    />
-                                    <FormControlLabel
-                                        label='Quase sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.whatsapp === RESPOSTAS.QUASE_SEMPRE}
-                                        onChange={e => this.setState({ whatsapp: e.target.value })}
-                                        value={RESPOSTAS.QUASE_SEMPRE}
-                                    />
-                                    <FormControlLabel
-                                        label='Sempre'
-                                        control={<Radio color="secondary" />}
-                                        checked={this.state.whatsapp === RESPOSTAS.SEMPRE}
-                                        onChange={e => this.setState({ whatsapp: e.target.value })}
-                                        value={RESPOSTAS.SEMPRE}
-                                    />
-                                </GridItem>
-                            </GridContainer>
-                        </React.Fragment>
+                    <Card cardTitle="Formulário Inicial">
+                        <GridContainer>
+                            {this.montarQuestionario()}
+                        </GridContainer>
                         <BottomBar>
                             <Tooltip title="Clique para continuar o questionário">
                                 <Button
@@ -245,10 +110,20 @@ export default class Principal extends Component {
                                     color="primary"
                                     onClick={this.handleProcessForm}
                                 >
-                                    Próximo
+                                    Continuar
                                 </Button>
                             </Tooltip>
                         </BottomBar>
+                        <ConfirmDialog
+                            dialogTitle="Atenção"
+                            onClose={this.handleClose}
+                            aria-labelledby="customized-dialog-title"
+                            open={this.state.error}
+                            messageContent="Por favor, verifique se todas as questões foram respondidas."
+                            handleConfirm={this.handleClose}
+                        >
+                            <Button onClick={this.handleClose} color="primary">Ok</Button>
+                        </ConfirmDialog>
                     </Card>
                 </Layout>
             </PaperContainer>

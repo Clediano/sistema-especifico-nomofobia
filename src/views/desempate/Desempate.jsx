@@ -8,7 +8,6 @@ import { Tooltip, Button, FormLabel, Radio, FormControlLabel } from '@material-u
 import GridContainer from '../../components/GridContainer';
 import GridItem from '../../components/GridItem';
 import BottomBar from '../../components/BottomBar';
-import { buscarURLFormulario } from './functions';
 
 export default class PerguntaDesempate extends Component {
     constructor(props) {
@@ -63,7 +62,7 @@ export default class PerguntaDesempate extends Component {
                 case "internet": {
                     return (
                         <FormControlLabel
-                            label='Navegação em sites'
+                            label='Navegação'
                             key="internet"
                             control={<Radio color="secondary" />}
                             checked={this.state.resposta === 'INTERNET'}
@@ -75,7 +74,7 @@ export default class PerguntaDesempate extends Component {
                 case "smartphone": {
                     return (
                         <FormControlLabel
-                            label='SmartPhone'
+                            label='Smartphone'
                             key="smartphone"
                             control={<Radio color="secondary" />}
                             checked={this.state.resposta === 'SMARTPHONE'}
