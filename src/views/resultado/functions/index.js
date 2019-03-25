@@ -1,7 +1,7 @@
 import { firebaseDatabase } from '../../../database/index';
 
-function buscarFormularioRespostas(nomeFormulario) {
-    return `conhecimento_${nomeFormulario}`;
+function buscarFormularioRespostas(categoria) {
+    return `conhecimento_${categoria}`;
 }
 
 export async function buscarResposta(categoria, pontuacao) {
@@ -18,13 +18,50 @@ export async function buscarResposta(categoria, pontuacao) {
         });
     });
 
-    if (pontuacao <= 50) {
-        return conhecimento[0];
-    } else if (pontuacao <= 75) {
-        return conhecimento[1];
-    } else if (pontuacao < 99) {
-        return conhecimento[2];
-    } else {
-        return conhecimento[3];
+    if(categoria === 'facebook'){
+        if (pontuacao <= 50) {
+            return conhecimento[0];
+        } else if (pontuacao <= 75) {
+            return conhecimento[1];
+        } else if (pontuacao < 99) {
+            return conhecimento[2];
+        } else {
+            return conhecimento[3];
+        }
+    }
+
+    if(categoria === 'whatsapp'){
+        if (pontuacao <= 50) {
+            return conhecimento[0];
+        } else if (pontuacao <= 75) {
+            return conhecimento[1];
+        } else if (pontuacao < 99) {
+            return conhecimento[2];
+        } else {
+            return conhecimento[3];
+        }
+    }
+
+    if(categoria === 'internet'){
+        if (pontuacao <= 49) {
+            return conhecimento[0];
+        } else if (pontuacao <= 79) {
+            return conhecimento[1];
+        } else {
+            return conhecimento[2];
+        }
+    }
+
+    if(categoria === 'smartphone'){
+        if (pontuacao <= 50) {
+            return conhecimento[0];
+        } else if (pontuacao <= 75) {
+            return conhecimento[1];
+        } else if (pontuacao < 99) {
+            return conhecimento[2];
+        } else {
+            return conhecimento[3];
+        }
     }
 }
+

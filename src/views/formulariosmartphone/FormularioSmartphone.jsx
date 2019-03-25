@@ -16,11 +16,11 @@ import {
     camposObrigatoriosPreenchidos
 } from '../../utils/functions';
 
-const FORMULARIO_NOME = 'formulario_internet';
-const FORMULARIO_CATEGORIA = 'internet';
-const CARD_TITLE = 'Navegação na internet';
+const FORMULARIO_NOME = 'formulario_smartphone';
+const FORMULARIO_CATEGORIA = 'smartphone';
+const CARD_TITLE = 'Smartphone';
 
-export default class FormularioInternet extends Component {
+export default class FormularioSmartphone extends Component {
 
     constructor(props) {
         super(props);

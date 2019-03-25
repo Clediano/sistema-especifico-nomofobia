@@ -18,6 +18,10 @@ import {
     montarQuestionario
 } from '../../utils/functions';
 
+const FORMULARIO_NOME = 'formulario_facebook';
+const FORMULARIO_CATEGORIA = 'facebook';
+const CARD_TITLE = 'Facebook';
+
 export default class FormularioFacebook extends Component {
 
     constructor(props) {
@@ -33,7 +37,7 @@ export default class FormularioFacebook extends Component {
     }
 
     async componentDidMount() {
-        const perguntas = await carregarQuestoesFormulario('formulario_facebook');
+        const perguntas = await carregarQuestoesFormulario(FORMULARIO_NOME);
 
         this.setState({ perguntas });
     }
@@ -76,7 +80,7 @@ export default class FormularioFacebook extends Component {
 
         if (camposObrigatoriosPreenchidos(perguntas, respostas)) {
             this.props.history.push('/resultado', {
-                categoria: 'facebook',
+                categoria: FORMULARIO_CATEGORIA,
                 pontuacao: pontuacaoTotal
             });
         } else {
@@ -96,7 +100,7 @@ export default class FormularioFacebook extends Component {
 
                 <Layout>
 
-                    <Card cardTitle="Formulário Facebook">
+                    <Card cardTitle={CARD_TITLE}>
 
                         <GridContainer>
                             {montarQuestionario(this.state, this.handleChange)}

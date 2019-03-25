@@ -13,14 +13,14 @@ import {
     carregarQuestoesFormulario,
     montarQuestionario,
     calcularPontuacaoFormulario,
-    camposObrigatoriosPreenchidos
+    camposObrigatoriosPreenchidos,
 } from '../../utils/functions';
 
-const FORMULARIO_NOME = 'formulario_internet';
-const FORMULARIO_CATEGORIA = 'internet';
-const CARD_TITLE = 'Navegação na internet';
+const FORMULARIO_NOME = 'formulario_whatsapp';
+const FORMULARIO_CATEGORIA = 'whatsapp';
+const CARD_TITLE = 'Whatsapp';
 
-export default class FormularioInternet extends Component {
+export default class FormularioWhatsapp extends Component {
 
     constructor(props) {
         super(props);
