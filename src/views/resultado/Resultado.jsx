@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tooltip, Button, Grid, Typography } from '@material-ui/core';
+import { Tooltip, Button, Grid, Typography, CircularProgress } from '@material-ui/core';
 import autoBind from 'react-autobind';
 import TopBar from '../../components/TopBar';
 import Layout from '../../components/Layout';
@@ -38,7 +38,7 @@ class Resultado extends Component {
                     <Card cardTitle="Resultado">
 
                         <Typography component="p" align="justify" style={{ padding: '25px' }}>
-                            {this.state.resposta}
+                            {this.state.resposta ? this.state.resposta : <CircularProgress />}
                         </Typography>
 
                         <BottomBar>

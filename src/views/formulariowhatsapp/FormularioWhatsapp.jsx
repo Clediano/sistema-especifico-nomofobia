@@ -81,7 +81,7 @@ export default class FormularioWhatsapp extends Component {
 
                     <Card cardTitle={CARD_TITLE}>
 
-                        <GridContainer>
+                        <GridContainer perguntas={this.state.perguntas}>
                             {montarQuestionario(this.state, this.handleChange)}
                         </GridContainer>
 

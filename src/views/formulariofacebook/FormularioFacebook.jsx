@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tooltip, Button } from '@material-ui/core';
+import { Tooltip, Button, CircularProgress } from '@material-ui/core';
 import autoBind from 'react-autobind';
 import TopBar from '../../components/TopBar';
 import Layout from '../../components/Layout';
@@ -22,7 +22,7 @@ const FORMULARIO_NOME = 'formulario_facebook';
 const FORMULARIO_CATEGORIA = 'facebook';
 const CARD_TITLE = 'Facebook';
 
-export default class FormularioFacebook extends Component {
+class FormularioFacebook extends Component {
 
     constructor(props) {
         super(props);
@@ -93,6 +93,7 @@ export default class FormularioFacebook extends Component {
     }
 
     render() {
+
         return (
             <PaperContainer>
 
@@ -102,7 +103,7 @@ export default class FormularioFacebook extends Component {
 
                     <Card cardTitle={CARD_TITLE}>
 
-                        <GridContainer>
+                        <GridContainer perguntas={this.state.perguntas}>
                             {montarQuestionario(this.state, this.handleChange)}
                         </GridContainer>
 
@@ -137,3 +138,4 @@ export default class FormularioFacebook extends Component {
         );
     }
 }
+export default FormularioFacebook

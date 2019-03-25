@@ -78,7 +78,7 @@ export default class Principal extends Component {
                 <Layout>
                     <Card cardTitle="Formulário Inicial">
 
-                        <GridContainer>
+                        <GridContainer perguntas={this.state.perguntas}>
                             {montarQuestionarioPrincipal(this.state, this.handleChange)}
                         </GridContainer>
 

@@ -107,7 +107,7 @@ export default class PerguntaDesempate extends Component {
                 <TopBar />
                 <Layout>
                     <Card cardTitle="Formulário Desempate">
-                        <GridContainer>
+                        <GridContainer perguntas={this.state.resposta}>
                             <GridItem hidden={false}>
                                 <FormLabel component="legend">Quais das opções abaixo você se considera mais dependente?</FormLabel>
                                 {this.renderizarOpcoes()}
